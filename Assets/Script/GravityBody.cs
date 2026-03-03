@@ -5,7 +5,7 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class GravityBody : MonoBehaviour
 {
-    private static float GRAVITY_FORCE = 800;
+    [SerializeField] private float GRAVITY_FORCE = 800;
     
     public Vector3 GravityDirection
     {
@@ -25,14 +25,11 @@ public class GravityBody : MonoBehaviour
         _rigidbody = transform.GetComponent<Rigidbody>();
         _gravityAreas = new List<GravityArea>();
     }
-    
+
     void FixedUpdate()
     {
+        // On garde uniquement la force d'attraction
         _rigidbody.AddForce(GravityDirection * (GRAVITY_FORCE * Time.fixedDeltaTime), ForceMode.Acceleration);
-
-        Quaternion upRotation = Quaternion.FromToRotation(transform.up, -GravityDirection);
-        Quaternion newRotation = Quaternion.Slerp(_rigidbody.rotation, upRotation * _rigidbody.rotation, Time.fixedDeltaTime * 3f);;
-        _rigidbody.MoveRotation(newRotation);
     }
 
     public void AddGravityArea(GravityArea gravityArea)

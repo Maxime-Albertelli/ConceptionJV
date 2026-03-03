@@ -65,24 +65,46 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
+        // 1. On récupère la vraie direction "Haut"
+        Vector3 gravityUp = -_gravityBody.GravityDirection;
+        if (gravityUp == Vector3.zero) gravityUp = transform.up;
+
         bool isRunning = _moveInput.magnitude > 0.1f;
 
         if (isRunning)
         {
-            // 1. Projection de la caméra sur la surface de la planète (Mario Galaxy style)
-            Vector3 camForwardOnSurface = Vector3.ProjectOnPlane(_cam.forward, transform.up).normalized;
-            Vector3 camRightOnSurface = Vector3.ProjectOnPlane(_cam.right, transform.up).normalized;
+            // 2. Projection de la caméra plus ROBUSTE
+            Vector3 camForwardOnSurface = Vector3.ProjectOnPlane(_cam.forward, gravityUp);
 
-            // 2. Calcul du vecteur de déplacement
-            // Note : on utilise _moveInput.y pour l'avant/arrière et _moveInput.x pour la gauche/droite
+            // SÉCURITÉ : Si la caméra regarde pile vers le sol (ou le ciel), la projection s'annule.
+            // On utilise alors le "Haut" de la caméra comme "Avant" pour le joueur.
+            if (camForwardOnSurface.sqrMagnitude < 0.01f)
+            {
+                camForwardOnSurface = Vector3.ProjectOnPlane(_cam.up, gravityUp);
+            }
+            camForwardOnSurface.Normalize();
+
+            // 3. Calcul de la "Droite" via un Produit Vectoriel (Cross Product)
+            // Cela garantit un angle droit parfait, sans aucun tremblement
+            Vector3 camRightOnSurface = Vector3.Cross(gravityUp, camForwardOnSurface).normalized;
+
+            // 4. Calcul du déplacement
             Vector3 moveDir = (camForwardOnSurface * _moveInput.y + camRightOnSurface * _moveInput.x).normalized;
 
-            // 3. Déplacement (MovePosition pour le feeling "vif" de Haste)
+            // Déplacement
             _rigidbody.MovePosition(_rigidbody.position + moveDir * (_speed * Time.fixedDeltaTime));
 
-            // 4. Rotation vers la direction du mouvement en respectant l'inclinaison (transform.up)
-            Quaternion targetRotation = Quaternion.LookRotation(moveDir, transform.up);
+            // Rotation
+            Quaternion targetRotation = Quaternion.LookRotation(moveDir, gravityUp);
             Quaternion newRotation = Quaternion.RotateTowards(_rigidbody.rotation, targetRotation, _turnSpeed * Time.fixedDeltaTime);
+            _rigidbody.MoveRotation(newRotation);
+        }
+        // ... (garde ton 'else' pour la rotation au repos)
+        else
+        {
+            // 4. ROTATION AU REPOS : Si on s'arrête, on continue d'aligner le joueur à la courbure de la planète
+            Quaternion targetUpRotation = Quaternion.FromToRotation(transform.up, gravityUp) * _rigidbody.rotation;
+            Quaternion newRotation = Quaternion.Slerp(_rigidbody.rotation, targetUpRotation, Time.fixedDeltaTime * 5f); // 5f pour la vitesse de redressement
 
             _rigidbody.MoveRotation(newRotation);
         }
