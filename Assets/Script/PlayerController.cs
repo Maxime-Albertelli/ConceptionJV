@@ -9,6 +9,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform _groundCheck;
     [SerializeField] private Transform _cam;
     [SerializeField] private Animator _animator;
+    [SerializeField] private ParticleSystem dustTrail;
+    
 
     private float _groundCheckRadius = 0.3f;
     [SerializeField] private float _speed = 10;
@@ -24,16 +26,27 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
+        var emission = dustTrail.emission;
+        emission.enabled = false;
         _rigidbody = transform.GetComponent<Rigidbody>();
         _gravityBody = transform.GetComponent<GravityBody>();
 
         if (_cam == null) _cam = Camera.main.transform;
     }
 
+    private void OnDrawGizmosSelected()
+    {
+        if (_groundCheck != null)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(_groundCheck.position, _groundCheckRadius);
+        }
+    }
+
     void Update()
     {
         // On gère uniquement la détection du sol et les animations ici
-        _isGrounded = Physics.CheckSphere(_groundCheck.position, _groundCheckRadius, _groundMask);
+        _isGrounded = Physics.CheckSphere(_groundCheck.position, _groundCheckRadius, _groundMask, QueryTriggerInteraction.Ignore);
 
         if (_animator != null)
         {
@@ -65,6 +78,13 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
+        Debug.Log(_isGrounded);
+        bool shouldEmit = _moveInput.magnitude > 0.1f && _isGrounded;
+
+        // 2. On récupère le module et on applique l'état (true ou false) d'un coup
+        var emission = dustTrail.emission;
+        emission.enabled = shouldEmit;
+
         // 1. On récupère la vraie direction "Haut"
         Vector3 gravityUp = -_gravityBody.GravityDirection;
         if (gravityUp == Vector3.zero) gravityUp = transform.up;
