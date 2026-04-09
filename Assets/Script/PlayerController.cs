@@ -78,7 +78,6 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
-        Debug.Log(_isGrounded);
         bool shouldEmit = _moveInput.magnitude > 0.1f && _isGrounded;
 
         // 2. On récupère le module et on applique l'état (true ou false) d'un coup
