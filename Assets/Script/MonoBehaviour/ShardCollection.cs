@@ -15,6 +15,7 @@ public class ShardCollection : MonoBehaviour
             Debug.Log("Shard collected");
             Destroy(other.gameObject);
             shardText.text = "Shards : " + shardValue.ToString();
+            GameManager.Instance.CheckPlanetCompletion(shardValue);
         }
         
     }
