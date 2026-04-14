@@ -10,13 +10,14 @@ public class PlanetBehaviour : MonoBehaviour
         return planetData.GetShardQuantity();
     }
 
-    private void OnTriggerEnter(Collider other)
+    public void PlayerEnteredGravity()
     {
-        // Si l'objet qui entre dans la zone de gravité est le joueur
-        if (other.CompareTag("Player"))
-        {
-            // On dit au GameManager que cette planète est la planète actuelle
-            GameManager.Instance.SetCurrentPlanet(this);
-        }
+        // Cette méthode est appelée par l'enfant quand le joueur entre dans la zone
+        GameManager.Instance.SetCurrentPlanet(this);
+    }
+
+    void DisplayTeleporter()
+    {
+
     }
 }
