@@ -2,15 +2,29 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+
+    [Header("Paramètres de Spawn")]
     [SerializeField] private GameObject pf_Planet;
+    [SerializeField] private float spawnDistance = 60f;
+    [SerializeField] private float teleportHeightOffset = 20f;
+
+    [Header("Références Joueur")]
+    [SerializeField] private ShardCollection playerShardScript;
+    [SerializeField] private Rigidbody playerRigidbody;
+
 
     public static GameManager Instance;
     private PlanetBehaviour currentPlanet;
+    private PlanetBehaviour nextPlanet;
 
     private void Awake()
     {
         if (Instance == null) { Instance = this; }
         else { Destroy(gameObject); }
+    }
+    void Start()
+    {
+        Instantiate(pf_Planet);
     }
 
     public void SetCurrentPlanet(PlanetBehaviour planet)
@@ -27,17 +41,28 @@ public class GameManager : MonoBehaviour
 
         if (playerCurrentShards >= requiredShards)
         {
-            Debug.Log("Planète complétée ! Apparition du téléporteur...");
+            Vector3 spawnPos = currentPlanet.transform.position + Vector3.right * spawnDistance;
+            GameObject nextPlanetObj = Instantiate(pf_Planet, spawnPos, Quaternion.identity);
+            nextPlanet = nextPlanetObj.GetComponent<PlanetBehaviour>();
+
+            currentPlanet.ActivateTeleporter();
+            Debug.Log("Nouvelle planète créée au loin. Téléporteur prêt !");
         }
     }
 
-    void Start()
+    public void GoToNextPlanet()
     {
-        Instantiate(pf_Planet);
+        if (nextPlanet == null) return;
+
+        playerShardScript.ResetShards();
+
+        playerRigidbody.transform.position = nextPlanet.transform.position + Vector3.up * teleportHeightOffset;
+        playerRigidbody.linearVelocity = Vector3.zero; // Stop l'inertie pour éviter les bugs
+
+        //Destroy(currentPlanet.gameObject, 2f);
+
+        currentPlanet = nextPlanet;
+        nextPlanet = null;
     }
 
-    void InstantiateNewPlanet()
-    {
-        Instantiate(pf_Planet);
-    }
 }

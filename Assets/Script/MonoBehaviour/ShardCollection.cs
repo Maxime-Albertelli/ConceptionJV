@@ -12,11 +12,16 @@ public class ShardCollection : MonoBehaviour
         {
             other.enabled = false;
             shardValue++;
-            Debug.Log("Shard collected");
             Destroy(other.gameObject);
             shardText.text = "Shards : " + shardValue.ToString();
             GameManager.Instance.CheckPlanetCompletion(shardValue);
         }
         
+    }
+
+    public void ResetShards()
+    {
+        shardValue = 0;
+        shardText.text = "Shards : " + shardValue.ToString();
     }
 }

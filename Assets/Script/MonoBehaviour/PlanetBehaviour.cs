@@ -2,12 +2,24 @@ using UnityEngine;
 
 public class PlanetBehaviour : MonoBehaviour
 {
+    [SerializeField] private GameObject myTeleporter;
     [SerializeField] private PlanetData planetData;
+
+    private void Awake()
+    {
+        // On s'assure que le TP est désactivé au spawn de la planète
+        if (myTeleporter != null) myTeleporter.SetActive(false);
+    }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public int GetShardQte()
     {
         return planetData.GetShardQuantity();
+    }
+
+    public void ActivateTeleporter()
+    {
+        if (myTeleporter != null) myTeleporter.SetActive(true);
     }
 
     public void PlayerEnteredGravity()
@@ -16,8 +28,4 @@ public class PlanetBehaviour : MonoBehaviour
         GameManager.Instance.SetCurrentPlanet(this);
     }
 
-    void DisplayTeleporter()
-    {
-
-    }
 }
