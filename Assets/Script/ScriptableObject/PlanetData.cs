@@ -7,12 +7,12 @@ public class PlanetData : ScriptableObject
     [SerializeField]
     int PlanetSize;
 
-    int GetPlanetSize()
+    public int GetPlanetSize()
     {
         return PlanetSize;
     }
 
-    int GetShardQuantity() {
+    public int GetShardQuantity() {
         return Mathf.FloorToInt(PlanetSize / 7);
     }
 

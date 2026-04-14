@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e9928b7f28ca5784e972aac788788616, type: 3}
-  m_Name: TestPlanetData
+  m_Script: {fileID: 11500000, guid: 0cd124ced725e3d45a76bbe4f041e8a0, type: 3}
+  m_Name: RegularPlanet
   m_EditorClassIdentifier: 
   PlanetSize: 35
