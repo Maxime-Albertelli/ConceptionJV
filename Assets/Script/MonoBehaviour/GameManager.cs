@@ -38,9 +38,9 @@ public class GameManager : MonoBehaviour
     public void CheckPlanetCompletion(int playerCurrentShards)
     {
         if (currentPlanet == null) return;
-
-        shardText.text = "Shards : " + playerCurrentShards.ToString();
+ 
         int requiredShards = currentPlanet.GetShardQte();
+        shardText.text = "Shards : " + playerCurrentShards.ToString() + "/" + requiredShards.ToString();
 
         if (playerCurrentShards >= requiredShards)
         {
@@ -70,7 +70,8 @@ public class GameManager : MonoBehaviour
 
     public void resetShardText(int shardValue)
     {
-        shardText.text = "Shards : " + shardValue.ToString();
+        int requiredShards = currentPlanet.GetShardQte();
+        shardText.text = "Shards : " + shardValue.ToString() + "/" + requiredShards.ToString();
     }
 
 }
