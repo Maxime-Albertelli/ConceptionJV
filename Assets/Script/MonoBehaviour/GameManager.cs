@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -12,6 +13,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private ShardCollection playerShardScript;
     [SerializeField] private Rigidbody playerRigidbody;
 
+    [SerializeField] private TextMeshProUGUI shardText;
 
     public static GameManager Instance;
     private PlanetBehaviour currentPlanet;
@@ -37,6 +39,7 @@ public class GameManager : MonoBehaviour
     {
         if (currentPlanet == null) return;
 
+        shardText.text = "Shards : " + playerCurrentShards.ToString();
         int requiredShards = currentPlanet.GetShardQte();
 
         if (playerCurrentShards >= requiredShards)
@@ -63,6 +66,11 @@ public class GameManager : MonoBehaviour
 
         currentPlanet = nextPlanet;
         nextPlanet = null;
+    }
+
+    public void resetShardText(int shardValue)
+    {
+        shardText.text = "Shards : " + shardValue.ToString();
     }
 
 }
