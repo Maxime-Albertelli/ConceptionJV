@@ -13,6 +13,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] private ShardCollection playerShardScript;
     [SerializeField] private Rigidbody playerRigidbody;
 
+    [Header("Références Indicateur")]
+    [SerializeField] private IndicatorArrow arrowIndicator;
+
     [SerializeField] private TextMeshProUGUI shardText;
 
     public static GameManager Instance;
@@ -49,6 +52,11 @@ public class GameManager : MonoBehaviour
             nextPlanet = nextPlanetObj.GetComponent<PlanetBehaviour>();
 
             currentPlanet.ActivateTeleporter();
+            Transform tpTransform = currentPlanet.GetTeleporterTransform();
+            if (tpTransform != null && arrowIndicator != null)
+            {
+                arrowIndicator.Show(tpTransform, currentPlanet.transform);
+            }
             Debug.Log("Nouvelle planète créée au loin. Téléporteur prêt !");
         }
     }
@@ -56,6 +64,11 @@ public class GameManager : MonoBehaviour
     public void GoToNextPlanet()
     {
         if (nextPlanet == null) return;
+
+        if (arrowIndicator != null)
+        {
+            arrowIndicator.Hide();
+        }
 
         playerShardScript.ResetShards();
 

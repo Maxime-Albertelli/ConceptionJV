@@ -17,6 +17,15 @@ public class PlanetBehaviour : MonoBehaviour
         return planetData.GetShardQuantity();
     }
 
+    public Transform GetTeleporterTransform()
+    {
+        if (myTeleporter != null)
+        {
+            return myTeleporter.transform;
+        }
+        return null;
+    }
+
     public void ActivateTeleporter()
     {
         if (myTeleporter != null) myTeleporter.SetActive(true);
