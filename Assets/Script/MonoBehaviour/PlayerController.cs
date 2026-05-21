@@ -48,6 +48,10 @@ public class PlayerController : MonoBehaviour
         // On gère uniquement la détection du sol et les animations ici
         _isGrounded = Physics.CheckSphere(_groundCheck.position, _groundCheckRadius, _groundMask, QueryTriggerInteraction.Ignore);
 
+        _animator.SetFloat("moveX", _moveInput.x);
+        _animator.SetFloat("moveY", _moveInput.y);
+
+
         if (_animator != null)
         {
             _animator.SetBool("isJumping", !_isGrounded);

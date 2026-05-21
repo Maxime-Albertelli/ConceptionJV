@@ -1858,7 +1858,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4067906803894797837, guid: 1fc92b2687b1f024da1a75a9dcba75e8, type: 3}
       propertyPath: m_Center.y
-      value: 1.1
+      value: 1.2
       objectReference: {fileID: 0}
     - target: {fileID: 5055340763837150228, guid: 1fc92b2687b1f024da1a75a9dcba75e8, type: 3}
       propertyPath: shardText
