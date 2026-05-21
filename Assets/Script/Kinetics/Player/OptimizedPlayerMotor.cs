@@ -7,6 +7,7 @@ using static GroundProbe;
 [RequireComponent(typeof(GroundProbe))]
 public class OptimizedPlayerMotor : MonoBehaviour
 {
+
     [Header("References")]
     [SerializeField] private MovementConfig config;
     [SerializeField] private Transform cameraTransform;
@@ -14,11 +15,19 @@ public class OptimizedPlayerMotor : MonoBehaviour
 
     private CharacterController controller;
     private PlayerInputReader input;
+    private MovementState movementState;
     private GroundProbe groundProbe;
 
     // --- CORE ---
     private Vector3 currentVelocity;
     private bool isGrounded;
+    private MovementState currentState = MovementState.Grounded;
+
+    // --- TIMERS ---
+    private float jumpBufferTimer;
+    private float coyoteTimer;
+    private float dashTimer;
+    private float dashCooldownTimer;
 
     private void Awake()
     {
@@ -36,16 +45,33 @@ public class OptimizedPlayerMotor : MonoBehaviour
         }
 
         float dt = Time.deltaTime;
+        jumpBufferTimer -= dt;
+        coyoteTimer -= dt;
+        dashCooldownTimer -= dt;
 
         // Step 1: Check the environment (are we on the ground?)
         UpdateGrounding();
         CheckJump();
+        CheckDash();
 
-        // Step 2: Calculate vertical forces (Gravity)
-        CalculateGravity(dt);
+        // Evaluate state-specific behavior
+        switch (currentState)
+        {
+            case MovementState.Grounded:
+                CalculateGravity(dt);
+                CalculateHorizontalMovement(dt);
+                break;
 
-        // Step 2.5: Calculate horizontal movement
-        CalculateHorizontalMovement(dt);
+            case MovementState.Airborne:
+                CalculateGravity(dt);
+                CalculateHorizontalMovement(dt);
+                break;
+
+            case MovementState.Dashing:
+                dashTimer -= dt;
+                break;
+        }
+
         // Step 2.75: Rotate character to face movement direction
         RotateCharacter(dt);
 
@@ -56,8 +82,30 @@ public class OptimizedPlayerMotor : MonoBehaviour
 
     private void CheckJump()
     {
-        if (input.JumpPressed && isGrounded) {
+        if (input.JumpPressed) {
+            jumpBufferTimer = config.jumpBufferTime;
+        }
+
+        if (jumpBufferTimer > 0f && coyoteTimer > 0f) {
+            currentState = MovementState.Airborne;
             currentVelocity.y = Mathf.Sqrt(2f * config.jumpHeight * config.gravityDown);
+            
+            jumpBufferTimer = 0f;
+            coyoteTimer = 0f;
+        }
+    }
+
+    private void CheckDash(){
+        if (input.DashPressed && dashCooldownTimer <= 0f) {
+            currentState = MovementState.Dashing;
+            dashCooldownTimer = config.dashCooldown;
+            dashTimer = config.dashDuration;
+            currentVelocity = modelRoot.forward * config.dashSpeed;
+            currentVelocity.y = 0.1f; // Small upward force
+        }
+
+        if (dashTimer <= 0f && currentState == MovementState.Dashing) {
+            currentState = isGrounded ? MovementState.Grounded : MovementState.Airborne;
         }
     }
 
@@ -119,6 +167,13 @@ public class OptimizedPlayerMotor : MonoBehaviour
     {
         GroundHit hit = groundProbe.Probe(config.groundProbeRadius, config.groundProbeDistance, config.maxSlopeAngle);
         isGrounded = hit.isGrounded;
+        if (isGrounded)
+        {
+            currentState = MovementState.Grounded;
+            coyoteTimer = config.coyoteTime;
+        } else {
+            currentState = MovementState.Airborne;
+        }
     }
 
     private void CalculateGravity(float dt)

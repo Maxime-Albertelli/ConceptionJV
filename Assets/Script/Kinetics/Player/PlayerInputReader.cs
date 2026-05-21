@@ -102,7 +102,10 @@ public class PlayerInputReader : MonoBehaviour
 
         if (dashAction != null)
         {
-            if (subscribe) dashAction.performed += OnDashPerformed;
+            if (subscribe) {
+                dashAction.performed += OnDashPerformed;
+                dashAction.canceled += ctx => DashPressed = false;
+            }
             else dashAction.performed -= OnDashPerformed;
         }
 
@@ -129,6 +132,7 @@ public class PlayerInputReader : MonoBehaviour
     private void OnJumpCanceled(InputAction.CallbackContext ctx)
     {
         JumpReleased = true;
+        JumpPressed = false; // Ensure we don't have both pressed and released as true
     }
 
     private void OnDashPerformed(InputAction.CallbackContext ctx)
