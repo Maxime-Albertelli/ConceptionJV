@@ -68,7 +68,6 @@ public class PlayerController : MonoBehaviour
         // Le saut est déclenché par l'event, plus besoin de Input.GetKeyDown
         if (_isGrounded)
         {
-            
             // Le saut se fait toujours à l'opposé de la gravité planétaire
             _rigidbody.AddForce(-_gravityBody.GravityDirection * _jumpForce, ForceMode.Impulse);
         }
