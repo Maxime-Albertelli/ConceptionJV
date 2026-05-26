@@ -24,12 +24,12 @@ MonoBehaviour:
   groundProbeRadius: 0.5
   maxSlopeAngle: 0.5
   groundStickiness: 5
-  jumpHeight: 5
+  jumpHeight: 2
   coyoteTime: 0.2
   jumpBufferTime: 0.2
   jumpCutoffMultiplier: 0.5
-  gravityDown: 9.81
-  fallMultiplier: 2.5
+  gravityDown: 40
+  fallMultiplier: 1
   maxFallSpeed: 20
   apexHangMultiplier: 0.5
   apexThreshold: 0.1
