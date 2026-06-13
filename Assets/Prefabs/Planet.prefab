@@ -160,8 +160,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5e2d4a0135f6bf499a4f8fa6cb0be07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myTeleporter: {fileID: 6640071182464234773}
-  planetData: {fileID: 11400000, guid: a5731408e1941e745b674f9c401140fb, type: 2}
 --- !u!1 &6098058093971669600
 GameObject:
   m_ObjectHideFlags: 0
@@ -209,8 +207,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5e2d4a0135f6bf499a4f8fa6cb0be07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myTeleporter: {fileID: 0}
-  planetData: {fileID: 11400000, guid: a5731408e1941e745b674f9c401140fb, type: 2}
 --- !u!135 &2231926121951498798
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -400,11 +396,6 @@ PrefabInstance:
 --- !u!4 &561856927246771700 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 846612622722968474, guid: 1f91e932b25faae45829a6e1e717eacf, type: 3}
-  m_PrefabInstance: {fileID: 897298622656368238}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &6640071182464234773 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5788706449491753851, guid: 1f91e932b25faae45829a6e1e717eacf, type: 3}
   m_PrefabInstance: {fileID: 897298622656368238}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &3201330411562590850

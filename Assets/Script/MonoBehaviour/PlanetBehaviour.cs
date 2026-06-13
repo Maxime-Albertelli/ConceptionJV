@@ -2,39 +2,49 @@ using UnityEngine;
 
 public class PlanetBehaviour : MonoBehaviour
 {
-    [SerializeField] private GameObject myTeleporter;
-    [SerializeField] private PlanetData planetData;
+    // N'oublie pas de glisser l'objet enfant contenant Planet.cs ici dans l'inspecteur
+    [SerializeField] private Planet planetScript;
 
-    private void Awake()
+    // Appelée par le GameManager quand les shards sont collectés
+    public void ActivateTeleporter()
     {
-        // On s'assure que le TP est désactivé au spawn de la planète
-        if (myTeleporter != null) myTeleporter.SetActive(false);
+        if (planetScript != null)
+        {
+            planetScript.SetTeleporterActive(true);
+        }
     }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    public int GetShardQte()
-    {
-        return planetData.GetShardQuantity();
-    }
-
+    // Appelée par le GameManager pour pointer la flèche vers le bon endroit
     public Transform GetTeleporterTransform()
     {
-        if (myTeleporter != null)
+        if (planetScript != null)
         {
-            return myTeleporter.transform;
+            return planetScript.GetTeleporterTransform();
         }
         return null;
     }
-
-    public void ActivateTeleporter()
-    {
-        if (myTeleporter != null) myTeleporter.SetActive(true);
-    }
-
     public void PlayerEnteredGravity()
     {
         // Cette méthode est appelée par l'enfant quand le joueur entre dans la zone
         GameManager.Instance.SetCurrentPlanet(this);
     }
 
+    public float GetDynamicSpawnHeight()
+    {
+        // On récupère le trigger enfant
+        GravityZoneTrigger gravityTrigger = GetComponentInChildren<GravityZoneTrigger>();
+
+        if (gravityTrigger != null)
+        {
+            SphereCollider sphereCol = gravityTrigger.GetComponent<SphereCollider>();
+            if (sphereCol != null)
+            {
+                // On multiplie le rayon par le scale global pour avoir la vraie distance dans le monde
+                return sphereCol.radius * gravityTrigger.transform.lossyScale.x;
+            }
+        }
+
+        // Valeur de secours au cas où le collider serait introuvable
+        return 20f;
+    }
 }

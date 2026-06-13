@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour
     
 
     private float _groundCheckRadius = 0.3f;
+    [SerializeField] private float _groundToleranceDistance = 0.5f;
     [SerializeField] private float _speed = 10;
     private float _turnSpeed = 1500f;
     [SerializeField] private float _jumpForce = 100f;
@@ -46,18 +47,47 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         // On gère uniquement la détection du sol et les animations ici
-        _isGrounded = Physics.CheckSphere(_groundCheck.position, _groundCheckRadius, _groundMask, QueryTriggerInteraction.Ignore);
+        Vector3 downDirection = _gravityBody.GravityDirection;
+        if (downDirection == Vector3.zero) downDirection = -transform.up;
 
+        // 1. Détection de contact direct (Gère parfaitement l'atterrissage même si on s'enfonce dans le sol)
+        bool isTouchingGround = Physics.CheckSphere(_groundCheck.position, _groundCheckRadius, _groundMask, QueryTriggerInteraction.Ignore);
+
+        bool isWithinTolerance = false;
+
+        // 2. Si on ne touche pas directement, on lance la tolérance (SphereCast)
+        if (!isTouchingGround)
+        {
+            // On remonte l'origine d'un rayon entier pour être certain de ne pas démarrer dans le sol
+            Vector3 castOrigin = _groundCheck.position - downDirection * _groundCheckRadius;
+
+            // La distance doit compenser le fait qu'on a remonté l'origine
+            float castDistance = _groundToleranceDistance + _groundCheckRadius;
+
+            isWithinTolerance = Physics.SphereCast(
+                castOrigin,
+                _groundCheckRadius,
+                downDirection,
+                out RaycastHit hit,
+                castDistance,
+                _groundMask,
+                QueryTriggerInteraction.Ignore);
+        }
+
+        // 3. Le joueur est au sol s'il y a un contact direct OU s'il est dans la zone de tolérance
+        _isGrounded = isTouchingGround || isWithinTolerance;
+
+        // --- GESTION DES ANIMATIONS ---
         _animator.SetFloat("moveX", _moveInput.x);
         _animator.SetFloat("moveY", _moveInput.y);
-
 
         if (_animator != null)
         {
             _animator.SetBool("isJumping", !_isGrounded);
         }
-    }
 
+    }
+    
     // --- NOUVEAU SYSTÈME D'INPUT ---
 
     void OnMove(InputValue value)

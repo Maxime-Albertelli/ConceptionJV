@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 1
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
+  m_SkyboxMaterial: {fileID: 15303, guid: 0000000000000000f000000000000000, type: 0}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -428,7 +428,7 @@ Light:
   serializedVersion: 11
   m_Type: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 2
+  m_Intensity: 1
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -1322,8 +1322,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c102bcf709801240a46b8a0bfda07f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pf_Planet: {fileID: 4963293975560766552, guid: 3e87ead86e47353449bbaadc12bbda84, type: 3}
-  spawnDistance: 60
+  pf_Planet: {fileID: 7271094257208140216, guid: d5ed7445de7636146bc8cb124a34cded, type: 3}
+  spawnDistance: 120
   teleportHeightOffset: 20
   playerShardScript: {fileID: 920820122}
   playerRigidbody: {fileID: 920820125}
@@ -1808,13 +1808,17 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1320329340616911311, guid: 1fc92b2687b1f024da1a75a9dcba75e8, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 491258599}
     - target: {fileID: 2916254326178224493, guid: 1fc92b2687b1f024da1a75a9dcba75e8, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2916254326178224493, guid: 1fc92b2687b1f024da1a75a9dcba75e8, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 31.6
+      value: 30.25
       objectReference: {fileID: 0}
     - target: {fileID: 2916254326178224493, guid: 1fc92b2687b1f024da1a75a9dcba75e8, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1896,6 +1900,10 @@ PrefabInstance:
       propertyPath: _animator
       value: 
       objectReference: {fileID: 65439014}
+    - target: {fileID: 8520100480490045545, guid: 1fc92b2687b1f024da1a75a9dcba75e8, type: 3}
+      propertyPath: _groundToleranceDistance
+      value: 0.5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 7259562885480766398, guid: 1fc92b2687b1f024da1a75a9dcba75e8, type: 3}

@@ -6,7 +6,7 @@ public class GameManager : MonoBehaviour
 
     [Header("Paramètres de Spawn")]
     [SerializeField] private GameObject pf_Planet;
-    [SerializeField] private float spawnDistance = 60f;
+    [SerializeField] private float spawnDistance = 120f;
     [SerializeField] private float teleportHeightOffset = 20f;
 
     [Header("Références Joueur")]
@@ -29,23 +29,25 @@ public class GameManager : MonoBehaviour
     }
     void Start()
     {
-        Instantiate(pf_Planet);
+        GameObject initialPlanet = Instantiate(pf_Planet);
+
+        PlanetBehaviour behaviour = initialPlanet.GetComponent<PlanetBehaviour>();
+        SetCurrentPlanet(behaviour);
     }
 
     public void SetCurrentPlanet(PlanetBehaviour planet)
     {
         currentPlanet = planet;
-        Debug.Log("Nouvelle planète actuelle ! Éclats requis : " + currentPlanet.GetShardQte());
+        Debug.Log("Nouvelle planète actuelle ! Éclats requis : 5");
     }
 
     public void CheckPlanetCompletion(int playerCurrentShards)
     {
         if (currentPlanet == null) return;
  
-        int requiredShards = currentPlanet.GetShardQte();
-        shardText.text = "Shards : " + playerCurrentShards.ToString() + "/" + requiredShards.ToString();
+        shardText.text = "Shards : " + playerCurrentShards.ToString() + "/ 5";
 
-        if (playerCurrentShards >= requiredShards)
+        if (playerCurrentShards >= 5)
         {
             Vector3 spawnPos = currentPlanet.transform.position + Vector3.right * spawnDistance;
             GameObject nextPlanetObj = Instantiate(pf_Planet, spawnPos, Quaternion.identity);
@@ -72,10 +74,12 @@ public class GameManager : MonoBehaviour
 
         playerShardScript.ResetShards();
 
-        playerRigidbody.transform.position = nextPlanet.transform.position + Vector3.up * teleportHeightOffset;
-        playerRigidbody.linearVelocity = Vector3.zero; // Stop l'inertie pour éviter les bugs
+        // On interroge la planète cible pour connaître sa propre dimension
+        float dynamicOffset = nextPlanet.GetDynamicSpawnHeight();
 
-        //Destroy(currentPlanet.gameObject, 2f);
+        // On positionne le joueur exactement sur la bordure de la zone de gravité
+        playerRigidbody.transform.position = nextPlanet.transform.position + Vector3.up * dynamicOffset;
+        playerRigidbody.linearVelocity = Vector3.zero;
 
         currentPlanet = nextPlanet;
         nextPlanet = null;
@@ -83,8 +87,7 @@ public class GameManager : MonoBehaviour
 
     public void resetShardText(int shardValue)
     {
-        int requiredShards = currentPlanet.GetShardQte();
-        shardText.text = "Shards : " + shardValue.ToString() + "/" + requiredShards.ToString();
+        shardText.text = "Shards : " + shardValue.ToString() + "/ 5";
     }
 
 }
