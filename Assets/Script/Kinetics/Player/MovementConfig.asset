@@ -1,0 +1,61 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c770c3436c77cc442a1bb06b966cb798, type: 3}
+  m_Name: MovementConfig
+  m_EditorClassIdentifier: Assembly-CSharp::MovementConfig
+  maxRunningSpeed: 15
+  groundAcceleration: 40
+  groundDeceleration: 50
+  airAcceleration: 5
+  airDeceleration: 5
+  turnSharpness: 0.5
+  overspeedFriction: 0.5
+  absoluteMaxSpeed: 10
+  groundProbeDistance: 0.1
+  groundProbeRadius: 0.5
+  maxSlopeAngle: 0.5
+  groundStickiness: 5
+  jumpHeight: 2
+  coyoteTime: 0.2
+  jumpBufferTime: 0.2
+  jumpCutoffMultiplier: 0.5
+  gravityDown: 40
+  fallMultiplier: 1
+  maxFallSpeed: 20
+  apexHangMultiplier: 0.5
+  apexThreshold: 0.1
+  fastFallMultiplier: 3
+  spinSuspendDuration: 0.22
+  spinHopForce: 3.4
+  spinAirControlBoost: 2.2
+  backflipHeight: 4.8
+  backflipForwardSpeed: 6
+  backflipInputThreshold: -0.65
+  dashSpeed: 26
+  dashDuration: 0.16
+  dashCooldown: 0.28
+  diveForwardSpeed: 22
+  diveDownSpeed: 8
+  diveSteerStrength: 0.12
+  slideFriction: 18
+  rollPerfectWindow: 0.11
+  rollPerfectBoost: 1.35
+  popUpMomentumKeep: 0.65
+  rollJumpImpulse: 4.6
+  slideColliderHeight: 1
+  wallCheckDistance: 0.7
+  wallJumpUpForce: 10
+  wallJumpOutForce: 9
+  wallJumpCooldown: 0.2
+  wallRunGravityMultiplier: 0.35
+  wallRunMinSpeed: 10
+  wallRunDuration: 1.2
